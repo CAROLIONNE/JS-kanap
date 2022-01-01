@@ -19,10 +19,10 @@ async function fetchProducts() {
     });
 }
 
-//fonction créer card pour chaque item
+//fonction créer card pour chaque item 
  async function createCards() {
   await fetchProducts()
-  for (i =0; i<productsData.length; i++ ){
+  for (i =0; i < productsData.length; i++ ){
     sectionItems.innerHTML = productsData
     .map(
       (card) =>
@@ -41,4 +41,3 @@ async function fetchProducts() {
   }
 }
 createCards()
-
