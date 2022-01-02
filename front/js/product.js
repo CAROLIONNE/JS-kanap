@@ -5,7 +5,7 @@ const description = document.getElementById("description");
 const title = document.getElementById("title");
 const colors = document.getElementById("colors");
 
-
+//Recuperer données dans URL
 function $_GET(param) {
   var vars = {};
   window.location.href.replace(location.hash, "").replace(
@@ -39,6 +39,7 @@ async function fetchProduct(id) {
     });
 }
 
+//Affichage détails produit
 async function detailProduct() {
   await fetchProduct($_GET("id"));
   let displayColor = "";
