@@ -21,9 +21,9 @@ async function fetchProducts() {
 
   function formatCard(tableau, indice) {
     return `
-    <a href=${tableau[indice].id}>
+    <a href="./product.html?id=${tableau[indice]._id}">
     <article>
-    <img src=${tableau[indice].imageUrl} alt=${tableau[indice].altTxt}
+    <img src="${tableau[indice].imageUrl}" alt="${tableau[indice].altTxt}"
     />
     <h3 class="productName">${tableau[indice].name}</h3>
     <p class="productDescription">${tableau[indice].description}
@@ -43,3 +43,4 @@ async function createCards() {
   sectionItems.innerHTML = display
 }
 createCards();
+
