@@ -1,30 +1,13 @@
-let productData = [];
 const img = document.querySelector(".item__img")
 const price = document.getElementById("price");
 const description = document.getElementById("description");
 const title = document.getElementById("title");
 const colors = document.getElementById("colors");
 
-//Recuperer données dans URL
-function $_GET(param) {
-  var vars = {};
-  window.location.href.replace(location.hash, "").replace(
-    /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
-    function (m, key, value) {
-      // callback
-      vars[key] = value !== undefined ? value : "";
-    }
-  );
-  if (param) {
-    return vars[param] ? vars[param] : null;
-  }
-  return vars;
-}
-
-// fonction : récupérer données sur API
-async function fetchProduct(id) {
-  console.log(id);
-  await fetch(`http://localhost:3000/api/products/` + id)
+let productData = [];
+let params = (new URL(document.location)).searchParams;
+let id = params.get('id'); 
+fetch(`http://localhost:3000/api/products/` + id)
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -34,25 +17,57 @@ async function fetchProduct(id) {
       productData = data;
       console.log(productData);
     })
+    .then((detailProduct))
+
     .catch((erreur) => {
       console.log("Une erreur est survenue dans l'api");
     });
-}
+
 
 //Affichage détails produit
-async function detailProduct() {
-  await fetchProduct($_GET("id"));
-  let displayColor = "";
-  let imgsrc = `<img src=${productData.imageUrl} alt=${productData.altTxt}/>`
-  for (i =0; i < productData.colors.length; i++ ){
+
+
+
+ function detailProduct() {
+  
+  let imgSrc = `<img src=${productData.imageUrl} alt=${productData.altTxt}/>`
+  let displayColor = [];
+  for (i = 0; i < productData.colors.length; i++ ){
       displayColor += `<option value="${productData.colors[i]}">${productData.colors[i]}</option>`
     }
+    
     colors.innerHTML = displayColor;
     title.innerHTML = productData.name;
-    img.innerHTML = imgsrc;
+    img.innerHTML = imgSrc;
     price.innerHTML = productData.price;
     description.innerHTML = productData.description;
     document.title = productData.name;
+    
 }
 
-detailProduct();
+
+
+//Ajouter produits au panier
+
+
+
+/*
+// envoyer les données du panier
+document.getElementById('addToCart').addEventListener("click", (e) => {
+    e.preventDefault();
+    storage();
+})
+
+
+
+let quantity = document.querySelector("input").value;
+let color = document.querySelector('#colors option').value;
+console.log(color);
+
+//localStorage.name = JSON.stringify(obj);//  chaines de cacratères pour local storage
+//JSON.parse(localStorage.name) // transformer en objet JS
+// parseInt string en Number
+
+function storage(){
+    localStorage.productquantity = quantity;
+}*/
