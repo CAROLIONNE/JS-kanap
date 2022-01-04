@@ -27,4 +27,10 @@ fetch("http://localhost:3000/api/products")
     console.log("Une erreur est survenue dans l'api");
   });
 
-  
+  //test storage panier
+
+  /*function storagePanier() {
+    cart= [];
+    localStorage.setItem.panier = JSON.stringify(cart)
+
+  }*/
