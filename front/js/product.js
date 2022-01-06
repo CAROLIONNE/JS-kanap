@@ -28,7 +28,6 @@ fetch(`http://localhost:3000/api/products/` + id)
 ///////----Affichage détails produit----////////
 
 function detailProduct() {
-  
   /* test boucle couleur
   let displayColor = [];
   for (i = 0; i < productData.colors.length; i++) {
@@ -43,7 +42,7 @@ function detailProduct() {
 
     let parentNode = document.querySelector("#colors");
     parentNode.appendChild(newOption);
-  })
+  });
 
   title.innerHTML = productData.name;
   img.innerHTML = `<img src=${productData.imageUrl} alt=${productData.altTxt}/>`;
@@ -57,9 +56,9 @@ function detailProduct() {
 // envoyer les données du panier
 document.getElementById("addToCart").addEventListener("click", (e) => {
   e.preventDefault();
-  //storage();
+  storage();
 });
-
+/*
 function colorValue (){
   
   let color= document.querySelector("option").parentNode.value;
@@ -76,10 +75,7 @@ function colorValue (){
   
 }
 
-colorValue()
-
-let quantity = document.querySelector("input").value;
-//let productsCart = [id, quantity,color];
+colorValue()*/
 
 //console.log(productsCart);
 
@@ -87,14 +83,15 @@ let quantity = document.querySelector("input").value;
 //JSON.parse(localStorage.name) // transformer en objet JS
 // parseInt string en Number
 
-/*
 function storage() {
+  let color = document.querySelector("option").parentNode.value;
+  let quantity = document.querySelector("input").value;
+  let productsCart = [id, quantity, color];
+
   localStorage.cart = productsCart;
 }
 
-storage();
-
-
+/*
 if (localStorage.quantity === undefined){
     localStorage.productquantity = quantity
 }
