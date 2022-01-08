@@ -28,13 +28,6 @@ fetch(`http://localhost:3000/api/products/` + id)
 ///////----Affichage détails produit----////////
 
 function detailProduct() {
-  /* test boucle couleur
-  let displayColor = [];
-  for (i = 0; i < productData.colors.length; i++) {
-    displayColor += `<option value="${productData.colors[i]}">${productData.colors[i]}</option>`;
-  }
-  colorsElt.innerHTML = displayColor;
-  */
   productData.colors.forEach((color) => {
     let newOption = document.createElement("option");
     newOption.innerHTML = `${color}`;
@@ -51,13 +44,44 @@ function detailProduct() {
   document.title = productData.name;
 }
 
-//Ajouter produits au panier
 
-// envoyer les données du panier
+//Ajouter produits au panier
 document.getElementById("addToCart").addEventListener("click", (e) => {
   e.preventDefault();
-  storage();
+  addCart()
+})
+// envoyer les données du panier
+
+/*
+document.getElementById("addToCart").addEventListener("click", (e) => {
+  e.preventDefault();
+  let productSave = JSON.parse(localStorage.getItem("cart"))
+
+  //si il y a quelque chose dans le panier ajouter nouveau produit
+  //sinon créer la clef produit 
+
+  console.log(productArray);
+  console.log(productSave);
+  
+  let productArray = [] ;
+  if (localStorage.getItem("cart") == null){
+    
+    addStorage();
+    productSaved = localStorage.getItem("cart");
+    productArray.push(productSaved);
+    console.log("if");
+    
+  }else{
+    
+    addStorage();
+    localStorage.getItem("cart");
+    productArray.push((localStorage.getItem("cart")));
+    console.log("else");
+  }
+
 });
+*/
+
 /*
 function colorValue (){
   
@@ -82,19 +106,3 @@ colorValue()*/
 //localStorage.name = JSON.stringify(obj);//  chaines de cacratères pour local storage
 //JSON.parse(localStorage.name) // transformer en objet JS
 // parseInt string en Number
-
-function storage() {
-  let color = document.querySelector("option").parentNode.value;
-  let quantity = document.querySelector("input").value;
-  let productsCart = [id, quantity, color];
-
-  localStorage.cart = productsCart;
-}
-
-/*
-if (localStorage.quantity === undefined){
-    localStorage.productquantity = quantity
-}
-else (localStorage.quantity !== undefined)
-localStorage.removeItem(quantity);
-localStorage.productquantity = quantity*/
