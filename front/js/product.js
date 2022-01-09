@@ -4,6 +4,8 @@ const description = document.getElementById("description");
 const title = document.getElementById("title");
 const colorsElt = document.getElementById("colors");
 let productData = [];
+//colorsElt.setAttribute("required",true);
+//colorsElt.required = true;
 
 /////////----Recupérer ID dans URL----/////////
 
@@ -44,64 +46,57 @@ function detailProduct() {
   document.title = productData.name;
 }
 
-
 //Ajouter produits au panier
-document.getElementById("addToCart").addEventListener("click", (e) => {
-  e.preventDefault();
-  addCart()
-})
+
 // envoyer les données du panier
 
-/*
 document.getElementById("addToCart").addEventListener("click", (e) => {
   e.preventDefault();
-  let productSave = JSON.parse(localStorage.getItem("cart"))
+  let color = document.querySelector("option").parentNode.value;
+  let quantity = document.querySelector("input").value;
+  if (color == "") {
+    colorsElt.setAttribute(
+      "style",
+      "font-style : italic; border:1px solid red"
+    );
+    window.alert("Champs color non définie");
+    colorsElt.focus();
+  } else {
+    colorsElt.removeAttribute("style");
 
-  //si il y a quelque chose dans le panier ajouter nouveau produit
-  //sinon créer la clef produit 
+    let product = {
+      name: id,
+      quantity: quantity,
+      color: color,
+    };
+    console.log(product);
 
-  console.log(productArray);
-  console.log(productSave);
-  
-  let productArray = [] ;
-  if (localStorage.getItem("cart") == null){
-    
-    addStorage();
-    productSaved = localStorage.getItem("cart");
-    productArray.push(productSaved);
-    console.log("if");
-    
-  }else{
-    
-    addStorage();
-    localStorage.getItem("cart");
-    productArray.push((localStorage.getItem("cart")));
-    console.log("else");
-  }
+    let productSave = localStorage.getItem("cart");
 
-});
-*/
-
-/*
-function colorValue (){
-  
-  let color= document.querySelector("option").parentNode.value;
-  let color2 = colorsElt.value;
-  let color3 = [];
-  for (i = 0; i < colorsElt.length; i++){
-    if (colorsElt[i].selected){
-      color3.push(colorsElt[i].value)
+    let cart = [];
+    if (productSave != null) {
+      cart = JSON.parse(localStorage.getItem("cart"));
     }
+    console.log(cart);
+    changeQuantity(cart, product);
   }
-  console.log(color);
-  console.log(color2);
-  console.log(color3);
-  
+});
+
+function changeQuantity(cart, product) {
+  console.log("dans change quantity");
+  let foundProduct = cart.find(
+    (p) => p.name == product.name && p.color == product.color
+  );
+  if (foundProduct != undefined) {
+    let a = parseInt(foundProduct.quantity, 10);
+    let b = parseInt(product.quantity, 10);
+    foundProduct.quantity = JSON.stringify(a + b);
+  } else {
+    cart.push(product);
+  }
+  console.log(cart);
+  saveCart(cart);
 }
-
-colorValue()*/
-
-//console.log(productsCart);
 
 //localStorage.name = JSON.stringify(obj);//  chaines de cacratères pour local storage
 //JSON.parse(localStorage.name) // transformer en objet JS

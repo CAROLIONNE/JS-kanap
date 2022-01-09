@@ -1,5 +1,7 @@
 function saveCart(cart) {
+
   localStorage.setItem("cart", JSON.stringify(cart));
+  console.log("creation localStorage");
 }
 
 function getCart() {
@@ -26,13 +28,13 @@ function addCart(product) {
 
 function removeCart(product) {
   let cart = getCart();
-  cart = cart.filter((p) => p.id != product.id);
+  cart = cart.filter((p) => p.name != product.name);
   saveCart(cart);
 }
 
-function changeQuantity(product, quantity) {
+function changey(product, quantity) {
   let cart = getCart();
-  let foundProduct = cart.find((p) => p.id == product.id);
+  let foundProduct = cart.find((p) => p.name == product.name);
   if (foundProduct != undefined) {
     foundProduct.quantity += quantity;
     if (foundProduct.quantity <= 0) {
@@ -61,13 +63,14 @@ function getTotalPrice() {
 }
 /////////////////////////////////////////-------------------------------------------
 function addStorage() {
-  let color = document.querySelector("option").parentNode.value;
+ let color = document.querySelector("option").parentNode.value;
   let quantity = document.querySelector("input").value;
-
   let product = {
     name: id,
     quantity: quantity,
     color: color
-  };
-  localStorage.cart = JSON.stringify(product);
+  }
+  
+  localStorage.setItem("cart", JSON.stringify(product));
+  console.log("creation localStorage");
 }
