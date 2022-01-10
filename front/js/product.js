@@ -46,44 +46,48 @@ function detailProduct() {
   document.title = productData.name;
 }
 
-//Ajouter produits au panier
-
-// envoyer les données du panier
+//Ajouter produits au localStorage
 
 document.getElementById("addToCart").addEventListener("click", (e) => {
   e.preventDefault();
   let color = document.querySelector("option").parentNode.value;
   let quantity = document.querySelector("input").value;
+  let product = {
+    name: id,
+    quantity: quantity,
+    color: color,
+  };
+  let productSave = localStorage.getItem("cart");
+  let cart = [];
   if (color == "") {
     colorsElt.setAttribute(
       "style",
       "font-style : italic; border:1px solid red"
     );
-    window.alert("Champs color non définie");
+    window.alert("Champ color non défini");
     colorsElt.focus();
-  } else {
+  } 
+  if (quantity == 0) {
+    document.querySelector("input").setAttribute(
+      "style",
+      "font-style : italic; border:1px solid red"
+    );
+    window.alert("Combien en voulez vous ?");
+    document.querySelector("input").focus();
+  }
+  else {
     colorsElt.removeAttribute("style");
-
-    let product = {
-      name: id,
-      quantity: quantity,
-      color: color,
-    };
-    console.log(product);
-
-    let productSave = localStorage.getItem("cart");
-
-    let cart = [];
+    document.querySelector("input").removeAttribute("style");
     if (productSave != null) {
       cart = JSON.parse(localStorage.getItem("cart"));
     }
-    console.log(cart);
     changeQuantity(cart, product);
+    console.log(cart);
   }
 });
 
 function changeQuantity(cart, product) {
-  console.log("dans change quantity");
+  
   let foundProduct = cart.find(
     (p) => p.name == product.name && p.color == product.color
   );
@@ -94,7 +98,6 @@ function changeQuantity(cart, product) {
   } else {
     cart.push(product);
   }
-  console.log(cart);
   saveCart(cart);
 }
 

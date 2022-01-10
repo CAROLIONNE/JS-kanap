@@ -4,14 +4,6 @@ function saveCart(cart) {
   console.log("creation localStorage");
 }
 
-function getCart() {
-  let cart = localStorage.getItem("cart");
-  if (cart == null) {
-    return [];
-  } else {
-    return JSON.parse(cart);
-  }
-}
 
 function addCart(product) {
   let cart = getCart();
@@ -62,15 +54,16 @@ function getTotalPrice() {
   return number;
 }
 /////////////////////////////////////////-------------------------------------------
-function addStorage() {
- let color = document.querySelector("option").parentNode.value;
-  let quantity = document.querySelector("input").value;
-  let product = {
-    name: id,
-    quantity: quantity,
-    color: color
-  }
-  
-  localStorage.setItem("cart", JSON.stringify(product));
-  console.log("creation localStorage");
-}
+//fetch requette GET pour recupérer les produits sur l'API
+fetch("http://localhost:3000/api/products")
+  .then((response) => {
+    if (response.ok) {
+      return response.json();
+    }
+  })
+  .then((productsData) => {
+    console.log(productsData);
+  })
+  .catch((erreur) => {
+    console.log("Une erreur est survenue dans l'api");
+  });
