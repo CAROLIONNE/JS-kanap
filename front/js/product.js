@@ -87,7 +87,6 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
 });
 
 function changeQuantity(cart, product) {
-  
   let foundProduct = cart.find(
     (p) => p.name == product.name && p.color == product.color
   );

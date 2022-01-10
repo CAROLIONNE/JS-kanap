@@ -1,28 +1,20 @@
 const cartItems = document.getElementById("cart__items");
 let totalCart = 0;
+let productsSaved = localStorage.getItem("cart");
 
-productsSaved = localStorage.getItem("cart");
-function getCart() {
+fetch("http://localhost:3000/api/products")
+  .then((response) => {
+    if (response.ok) {
+      return response.json();
+    }
+  })
+  .then((productsData) => {
+    console.log(productsData);
 
-  if (productsSaved == null) {
-    window.alert("votre panier est vide");
-  } else {
-    return JSON.parse(productsSaved);
-  }
-}
-getCart();
-console.log(JSON.parse(productsSaved));
-
-if () {
-
-}else{
-  
-}
-
-
-
-cartItems.innerHTML = `
-  <article class="cart__item" data-id="{product_ID}" data-color="{product-color}">
+    for (product of JSON.parse(productsSaved)) {
+      console.log(product);
+      cartItems.innerHTML += `
+  <article class="cart__item" data-id=${product.name} dat/a-color="{product-color}">
     <div class="cart__item__img">
       <img src="../images/product01.jpg" alt="Photographie d'un canapé">
     </div>
@@ -43,4 +35,32 @@ cartItems.innerHTML = `
       </div>
     </div>
   </article>
-`;
+`;}
+    })
+  .catch((erreur) => {
+    console.log("Une erreur est survenue dans l'api");
+  });
+
+function getCart() {
+
+  if (productsSaved == null) {
+    window.alert("votre panier est vide");
+  } else {
+    return JSON.parse(productsSaved);
+  }
+}
+getCart();
+
+
+
+
+/*
+let foundProduct = JSON.parse(productsSaved).find(
+  (p) => p.name == ${product._id})
+
+if (foundProduct) {
+
+}else{
+
+}
+*/

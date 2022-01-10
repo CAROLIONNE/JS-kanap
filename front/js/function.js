@@ -53,17 +53,3 @@ function getTotalPrice() {
   }
   return number;
 }
-/////////////////////////////////////////-------------------------------------------
-//fetch requette GET pour recupérer les produits sur l'API
-fetch("http://localhost:3000/api/products")
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
-  })
-  .then((productsData) => {
-    console.log(productsData);
-  })
-  .catch((erreur) => {
-    console.log("Une erreur est survenue dans l'api");
-  });
