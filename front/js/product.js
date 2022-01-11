@@ -4,8 +4,6 @@ const description = document.getElementById("description");
 const title = document.getElementById("title");
 const colorsElt = document.getElementById("colors");
 let productData = [];
-//colorsElt.setAttribute("required",true);
-//colorsElt.required = true;
 
 /////////----Recupérer ID dans URL----/////////
 
@@ -28,19 +26,21 @@ fetch(`http://localhost:3000/api/products/` + id)
   });
 
 ///////----Affichage détails produit----////////
+let baliseImg="";
 
 function detailProduct() {
   productData.colors.forEach((color) => {
     let newOption = document.createElement("option");
     newOption.innerHTML = `${color}`;
     newOption.value = `${color}`;
-
+    
     let parentNode = document.querySelector("#colors");
     parentNode.appendChild(newOption);
   });
-
+  
+  baliseImg = `<img src=${productData.imageUrl} alt=${productData.altTxt}/>`;
   title.innerHTML = productData.name;
-  img.innerHTML = `<img src=${productData.imageUrl} alt=${productData.altTxt}/>`;
+  img.innerHTML = baliseImg;
   price.innerHTML = productData.price;
   description.innerHTML = productData.description;
   document.title = productData.name;
@@ -50,12 +50,15 @@ function detailProduct() {
 
 document.getElementById("addToCart").addEventListener("click", (e) => {
   e.preventDefault();
-  let color = document.querySelector("option").parentNode.value;
+  let color = document.querySelector("#colors").value;
   let quantity = document.querySelector("input").value;
   let product = {
-    name: id,
+    id : id,
+    name : productData.name,
+    price: productData.price,
     quantity: quantity,
     color: color,
+    image : baliseImg
   };
   let productSave = localStorage.getItem("cart");
   let cart = [];
@@ -64,7 +67,7 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
       "style",
       "font-style : italic; border:1px solid red"
     );
-    window.alert("Champ color non défini");
+    window.alert("Veuillez renseignez la couleur de votre choix");
     colorsElt.focus();
   } 
   if (quantity == 0) {
@@ -72,7 +75,7 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
       "style",
       "font-style : italic; border:1px solid red"
     );
-    window.alert("Combien en voulez vous ?");
+    window.alert("Veuillez renseignez la quantité");
     document.querySelector("input").focus();
   }
   else {

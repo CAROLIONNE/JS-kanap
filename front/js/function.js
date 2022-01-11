@@ -24,7 +24,7 @@ function removeCart(product) {
   saveCart(cart);
 }
 
-function changey(product, quantity) {
+function changeQti(product, quantity) {
   let cart = getCart();
   let foundProduct = cart.find((p) => p.name == product.name);
   if (foundProduct != undefined) {
@@ -45,11 +45,3 @@ function getNumberProduct() {
   return number;
 }
 
-function getTotalPrice() {
-  let cart = getCart();
-  let number = 0;
-  for (let product of cart) {
-    number += product.quantity * product.price;
-  }
-  return number;
-}
