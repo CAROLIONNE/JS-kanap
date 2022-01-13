@@ -26,18 +26,18 @@ fetch(`http://localhost:3000/api/products/` + id)
   });
 
 ///////----Affichage détails produit----////////
-let baliseImg="";
+let baliseImg = "";
 
 function detailProduct() {
   productData.colors.forEach((color) => {
     let newOption = document.createElement("option");
     newOption.innerHTML = `${color}`;
     newOption.value = `${color}`;
-    
+
     let parentNode = document.querySelector("#colors");
     parentNode.appendChild(newOption);
   });
-  
+
   baliseImg = `<img src=${productData.imageUrl} alt=${productData.altTxt}/>`;
   title.innerHTML = productData.name;
   img.innerHTML = baliseImg;
@@ -53,12 +53,12 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
   let color = document.querySelector("#colors").value;
   let quantity = document.querySelector("input").value;
   let product = {
-    id : id,
-    name : productData.name,
+    id: id,
+    name: productData.name,
     price: productData.price,
     quantity: quantity,
     color: color,
-    image : baliseImg
+    image: baliseImg,
   };
   let productSave = localStorage.getItem("cart");
   let cart = [];
@@ -69,16 +69,14 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
     );
     window.alert("Veuillez renseignez la couleur de votre choix");
     colorsElt.focus();
-  } 
+  }
   if (quantity == 0) {
-    document.querySelector("input").setAttribute(
-      "style",
-      "font-style : italic; border:1px solid red"
-    );
+    document
+      .querySelector("input")
+      .setAttribute("style", "font-style : italic; border:1px solid red");
     window.alert("Veuillez renseignez la quantité");
     document.querySelector("input").focus();
-  }
-  else {
+  } else {
     colorsElt.removeAttribute("style");
     document.querySelector("input").removeAttribute("style");
     if (productSave != null) {

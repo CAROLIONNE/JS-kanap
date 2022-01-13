@@ -8,7 +8,6 @@ fetch("http://localhost:3000/api/products")
     }
   })
   .then((productsData) => {
-    console.log(productsData);
     for (data of productsData) {
       sectionItems.innerHTML += `
         <a href="./product.html?id=${data._id}">
@@ -26,11 +25,3 @@ fetch("http://localhost:3000/api/products")
   .catch((erreur) => {
     console.log("Une erreur est survenue dans l'api");
   });
-
-  //test storage panier
-
-  /*function storagePanier() {
-    cart= [];
-    localStorage.setItem.panier = JSON.stringify(cart)
-
-  }*/
