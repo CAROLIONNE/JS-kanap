@@ -1,12 +1,14 @@
 const cartItems = document.getElementById("cart__items");
-let cartItem;
 let inputQuantity;
 let deleteItem;
 let productsSaved = localStorage.getItem("cart");
 let objProducts = JSON.parse(productsSaved);
+console.log(objProducts);
 let totalQuantity = document.getElementById("totalQuantity");
 let totalPrice = document.getElementById("totalPrice");
 let btnDelete = document.querySelectorAll("p .deleteItem");
+
+////////////////// Récuperation des produits localStorage //////////////////
 
 function getCart() {
   if (productsSaved == null) {
@@ -16,6 +18,8 @@ function getCart() {
   }
 }
 getCart();
+
+////////////////// Creation du panier //////////////////
 
 function createCart() {
   for (product of objProducts) {
@@ -45,29 +49,15 @@ function createCart() {
     </div>
     </article>
     `;
-    cartItem = document.querySelectorAll(".cart__item");
     deleteItem = document.querySelectorAll("p.deleteItem");
     inputQuantity = document.querySelectorAll(".itemQuantity");
   }
 }
 
-/*
-  for (i = 0; i < objProducts.length; i++) {
-    let index = objProducts.indexOf(`${product.id}`);
-    console.log(index);
-  }
-  */
+createCart();
 
-//suprimer un article training dev
-/*
-function removeCart() {
-  let cart = getCart();
-  cart = cart.filter((p) => p.id != product.id);
-  saveCart(cart);
-}
-*/
+////////////////// Prix total des articles du panier //////////////////
 
-// Prix total des articles du panier
 function getTotalPrice() {
   let cart = getCart();
   let priceCart = 0;
@@ -79,7 +69,8 @@ function getTotalPrice() {
 let total = getTotalPrice(objProducts);
 totalPrice.innerHTML = total;
 
-// Quantité totale des articles du panier
+////////////////// Quantité totale des articles du panier //////////////////
+
 let quantityCart = 0;
 function getNumberProduct() {
   let cart = getCart();
@@ -91,69 +82,64 @@ function getNumberProduct() {
 let totalQuantityCart = getNumberProduct(objProducts);
 totalQuantity.innerHTML = totalQuantityCart;
 
-////////////////// modification quantité du panier //////////////
+////////////////// Trouver le bon produit //////////////////
 
-/*
-for (product of cartItem) {
-  let color = product.dataset.color;
-  let id = product.dataset.id;
-}
-*/
-
-let color, id, colorObj, idObj;
-
-async function updateCart() {
-  await createCart();
-  cartItem.forEach((element) => {
-    color = element.dataset.color;
-    id = element.dataset.id;
-  });
-  objProducts.forEach((element) => {
-    colorObj = element.color;
-    idObj = element.id;
-  });
-}
-
-updateCart();
-
-for (input of inputQuantity) {
-  console.log(input);
-  if (color == colorObj && id == idObj) {
-    input.addEventListener("change", () => {
-      console.log("evenement modif quantité");
-      changeQuantity();
-    });
-  }
-}
-
-//////////////////////
 function findProduct(id, color) {
-  let foundProduct = objProducts.find(
-    (p) => p.id == product.id && p.color == product.color
-  );
-  console.log(foundProduct);
-  if (foundProduct != undefined) {
-    return foundProduct;
-  } else {
-    console.log("no product found");
-    return null;
+  for (let i of objProducts) {
+    console.log("TEST " + i);
+    if (i.id === id && i.color === color) return i;
   }
 }
 
-function changeQuantity(product, quantity) {
-  let cart = getCart();
-  //let foundProduct = cart.findProduct(product.id, product.option_produit);
+////////////////// Modification quantité du panier //////////////////
+
+function changeQuantity(i, quantity) {
+  //Get the id and color of selected item
+  let id = i.closest(".cart__item").dataset.id;
+  let color = i.closest(".cart__item").dataset.color;
   let foundProduct = findProduct(id, color);
-  //let foundProduct = cart.findProduct(cart.id, cart.color);
-  console.log(foundProduct);
-  if (foundProduct != undefined) {
-    foundProduct.quantity = parseInt(quantity);
-    if (foundProduct.quantity < 1) {
-      localStorage.removeItem(foundProduct);
-      //cart.remove(foundProduct);
-    } else {
-      saveCart();
+
+  for (let i of objProducts) {
+    if (i.id == foundProduct.id && i.color == foundProduct.color) {
+      i.quantity = quantity;
     }
   }
-  //window.location.reload();
+  saveCart(objProducts);
+  location.reload();
+}
+////////////////// Evenement type change pour changer quantité  //////////////////
+
+for (let input of inputQuantity) {
+  input.addEventListener("change", (e) => {
+    changeQuantity(input, e.target.value);
+  });
+}
+
+////////////////// supprimer du panier //////////////////
+
+function DeleteProduct(i) {
+  //Get the id and color of selected item
+  let id = i.closest(".cart__item").dataset.id;
+  let color = i.closest(".cart__item").dataset.color;
+  let foundProduct = findProduct(id, color);
+
+  for (let i of objProducts) {
+    if (i.id == foundProduct.id && i.color == foundProduct.color) {
+      //i.quantity = 0;
+      localStorage.removeItem(i);
+    }
+  }
+  saveCart(objProducts);
+  location.reload();
+}
+/*
+for (let input of deleteItem) {
+  input.addEventListener("click", DeleteProduct(i));
+}
+*/
+for (let input of deleteItem) {
+  input.addEventListener("click", (e) => {
+    //DeleteProduct(e);
+    DeleteProduct(objProducts);
+  });
 }
