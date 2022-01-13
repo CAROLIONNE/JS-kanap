@@ -1,12 +1,10 @@
 const cartItems = document.getElementById("cart__items");
 let inputQuantity;
-let deleteItem;
+let btnDelete;
 let productsSaved = localStorage.getItem("cart");
 let objProducts = JSON.parse(productsSaved);
-console.log(objProducts);
 let totalQuantity = document.getElementById("totalQuantity");
 let totalPrice = document.getElementById("totalPrice");
-let btnDelete = document.querySelectorAll("p .deleteItem");
 
 ////////////////// Récuperation des produits localStorage //////////////////
 
@@ -49,7 +47,7 @@ function createCart() {
     </div>
     </article>
     `;
-    deleteItem = document.querySelectorAll("p.deleteItem");
+    btnDelete = document.querySelectorAll("p.deleteItem");
     inputQuantity = document.querySelectorAll(".itemQuantity");
   }
 }
@@ -59,9 +57,8 @@ createCart();
 ////////////////// Prix total des articles du panier //////////////////
 
 function getTotalPrice() {
-  let cart = getCart();
   let priceCart = 0;
-  for (let product of cart) {
+  for (let product of objProducts) {
     priceCart += product.quantity * product.price;
   }
   return priceCart;
@@ -71,10 +68,9 @@ totalPrice.innerHTML = total;
 
 ////////////////// Quantité totale des articles du panier //////////////////
 
-let quantityCart = 0;
 function getNumberProduct() {
-  let cart = getCart();
-  for (let product of cart) {
+  let quantityCart = 0;
+  for (let product of objProducts) {
     quantityCart += parseInt(product.quantity, 10);
   }
   return quantityCart;
@@ -126,20 +122,17 @@ function DeleteProduct(i) {
   for (let i of objProducts) {
     if (i.id == foundProduct.id && i.color == foundProduct.color) {
       //i.quantity = 0;
-      localStorage.removeItem(i);
+      localStorage.removeItem("cart");
     }
   }
   saveCart(objProducts);
   location.reload();
 }
-/*
-for (let input of deleteItem) {
-  input.addEventListener("click", DeleteProduct(i));
-}
-*/
-for (let input of deleteItem) {
+
+for (let input of btnDelete) {
   input.addEventListener("click", (e) => {
-    //DeleteProduct(e);
-    DeleteProduct(objProducts);
+    console.log("event suppr");
+    DeleteProduct(e);
+    //DeleteProduct(objProducts);
   });
 }
