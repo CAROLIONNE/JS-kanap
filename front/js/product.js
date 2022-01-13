@@ -3,10 +3,10 @@ const price = document.getElementById("price");
 const description = document.getElementById("description");
 const title = document.getElementById("title");
 const colorsElt = document.getElementById("colors");
-let productData = [];
 
 /////////----Recupérer ID dans URL----/////////
 
+let productData = [];
 let params = new URL(document.location).searchParams;
 let id = params.get("id");
 fetch(`http://localhost:3000/api/products/` + id)
@@ -17,7 +17,6 @@ fetch(`http://localhost:3000/api/products/` + id)
   })
   .then((data) => {
     productData = data;
-    console.log(productData);
   })
   .then(detailProduct)
 
@@ -73,14 +72,15 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
   if (quantity == 0) {
     document
       .querySelector("input")
-      .setAttribute("style", "font-style : italic; border:1px solid red");
+      .setAttribute("style", "font-style : italic; border:2px solid red");
     window.alert("Veuillez renseignez la quantité");
     document.querySelector("input").focus();
   } else {
     colorsElt.removeAttribute("style");
     document.querySelector("input").removeAttribute("style");
     if (productSave != null) {
-      cart = JSON.parse(localStorage.getItem("cart"));
+      //cart = JSON.parse(localStorage.getItem("cart"));
+      cart = JSON.parse(productSave);
     }
     changeQuantity(cart, product);
     console.log(cart);
