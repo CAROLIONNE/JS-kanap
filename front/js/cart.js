@@ -1,13 +1,10 @@
 const cartItems = document.getElementById("cart__items");
-let inputQuantity;
-let btnDelete;
 let productsSaved = localStorage.getItem("cart");
 let objProducts = JSON.parse(productsSaved);
 let totalQuantity = document.getElementById("totalQuantity");
 let totalPrice = document.getElementById("totalPrice");
 
 ////////////////// Récuperation des produits localStorage //////////////////
-
 function getCart() {
   if (productsSaved == null) {
     window.alert("votre panier est vide");
@@ -15,8 +12,8 @@ function getCart() {
     return JSON.parse(productsSaved);
   }
 }
-getCart();
 
+getCart();
 ////////////////// Creation du panier //////////////////
 
 function createCart() {
@@ -47,8 +44,6 @@ function createCart() {
     </div>
     </article>
     `;
-    btnDelete = document.querySelectorAll("p.deleteItem");
-    inputQuantity = document.querySelectorAll(".itemQuantity");
   }
 }
 
@@ -95,15 +90,17 @@ function changeQuantity(i, quantity) {
   let color = i.closest(".cart__item").dataset.color;
   let foundProduct = findProduct(id, color);
 
-  for (let i of objProducts) {
-    if (i.id == foundProduct.id && i.color == foundProduct.color) {
-      i.quantity = quantity;
+  for (let product of objProducts) {
+    if (product.id == foundProduct.id && product.color == foundProduct.color) {
+      product.quantity = quantity;
     }
   }
   saveCart(objProducts);
-  location.reload();
+  window.location.reload();
 }
+
 ////////////////// Evenement type change pour changer quantité  //////////////////
+let inputQuantity = document.querySelectorAll(".itemQuantity");
 
 for (let input of inputQuantity) {
   input.addEventListener("change", (e) => {
@@ -111,28 +108,15 @@ for (let input of inputQuantity) {
   });
 }
 
-////////////////// supprimer du panier //////////////////
+////////////////// supprimer un produit du panier //////////////////
 
-function DeleteProduct(i) {
-  //Get the id and color of selected item
-  let id = i.closest(".cart__item").dataset.id;
-  let color = i.closest(".cart__item").dataset.color;
-  let foundProduct = findProduct(id, color);
+let deleteProduct = document.querySelectorAll(".deleteItem");
 
-  for (let i of objProducts) {
-    if (i.id == foundProduct.id && i.color == foundProduct.color) {
-      //i.quantity = 0;
-      localStorage.removeItem("cart");
-    }
-  }
-  saveCart(objProducts);
-  location.reload();
-}
-
-for (let input of btnDelete) {
-  input.addEventListener("click", (e) => {
-    console.log("event suppr");
-    DeleteProduct(e);
-    //DeleteProduct(objProducts);
+for (let i = 0; i < deleteProduct.length; i++) {
+  deleteProduct[i].addEventListener("click", (event) => {
+    event.preventDefault();
+    objProducts.splice(i, 1);
+    saveCart(objProducts);
+    location.reload();
   });
 }
