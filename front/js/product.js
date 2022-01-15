@@ -54,7 +54,6 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
   let product = {
     id: id,
     name: productData.name,
-    price: productData.price,
     quantity: quantity,
     color: color,
     image: baliseImg,
