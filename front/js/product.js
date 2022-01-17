@@ -99,7 +99,3 @@ function changeQuantity(cart, product) {
   }
   saveCart(cart);
 }
-
-//localStorage.name = JSON.stringify(obj);//  chaines de cacratères pour local storage
-//JSON.parse(localStorage.name) // transformer en objet JS
-// parseInt string en Number

@@ -29,7 +29,7 @@ fetch("http://localhost:3000/api/products")
   .then((fullBasket) => {
     addEvent();
   })
-  .catch((erreur) => {
+  .catch((error) => {
     console.log("Une erreur est survenue dans l'api");
   });
 
@@ -102,7 +102,7 @@ function getTotal() {
 
 function addEvent() {
   let inputQuantity = document.querySelectorAll(".itemQuantity");
-
+  // Ecouter l'evenement au changement de quantité
   for (let input of inputQuantity) {
     input.addEventListener("change", (e) => {
       changeQuantity(input, e.target.value);
@@ -110,7 +110,7 @@ function addEvent() {
   }
 
   let deleteProduct = document.querySelectorAll(".deleteItem");
-
+  // Ecouter l'evenement au click sur les boutons "supprimer"
   for (let i = 0; i < deleteProduct.length; i++) {
     deleteProduct[i].addEventListener("click", (event) => {
       event.preventDefault();
@@ -176,7 +176,7 @@ function validateForm() {
   villeErr = document.getElementById("cityErrorMsg");
   mailErr = document.getElementById("emailErrorMsg");
 
-  //Contôle du nom prenom et de la ville (pas de numérique)
+  //Contrôle du nom, prenom et de la ville
   let nomValide = validateAlpha(nom, nomErr);
   let prenomValide = validateAlpha(prenom, prenomErr);
   let villeValide = validateAlpha(ville, villeErr);
@@ -192,18 +192,20 @@ function validateForm() {
       email: mail.value,
     };
     console.log(contact);
+    console.log(toSend);
     //envoyer le formulaire
     return true;
   } else {
     return false;
   }
 }
+
 // Attribut onsubmit pour bloquer la validation du formulaire si la fonction retourne false
 document
   .querySelector(".cart__order__form")
   .setAttribute("onsubmit", "return validateForm();");
 
-// Tableau d'id
+// Tableau d'id pour l'envoyer a l'API
 let products = [];
 for (i = 0; i < objProducts.length; i++) {
   products.push(objProducts[i].id);
@@ -229,17 +231,11 @@ async function validateCart() {
     });
 }
 
-validateCart();
+//validateCart();
 
-/*
 ////////////////// Evenement sur bouton commander //////////////////
 
 document.getElementById("order").addEventListener("click", (e) => {
-  validateForm();
-  console.log(contact);
-  console.log(command);
-  console.log(products);
+  e.preventDefault();
   validateCart();
 });
-
-*/
