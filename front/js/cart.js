@@ -26,7 +26,7 @@ fetch("http://localhost:3000/api/products")
   .then((total) => {
     resumeCart();
   })
-  .then((total) => {
+  .then((fullBasket) => {
     addEvent();
   })
   .catch((erreur) => {
@@ -47,8 +47,6 @@ function getCart() {
 
 function resumeCart() {
   for (product of objProducts) {
-    console.log(product);
-    console.log(objProducts);
     cartItems.innerHTML += `
     <article class="cart__item" data-id=${product.id} data-color=${product.color}>
     <div class="cart__item__img">
@@ -101,6 +99,7 @@ function getTotal() {
   totalQuantity.innerHTML = quantityCart;
 }
 ////////////////// Event modifier quantité ou supprimer un produit du panier //////////////////
+
 function addEvent() {
   let inputQuantity = document.querySelectorAll(".itemQuantity");
 
@@ -128,8 +127,9 @@ function validateAlpha(champs, message) {
   let regex = /^[a-zA-Z]{2,}$/;
   if (!regex.test(champs.value)) {
     // Mise en style
-    champs.setAttribute("style", "font-style : italic; border:1px solid red");
+    champs.setAttribute("style", "font-style : italic; border:2px solid red");
     champs.focus();
+
     message.textContent = "Saisie incorrecte";
     // retourne la non validation
     return false;
@@ -147,7 +147,7 @@ function validateMail(champs, message) {
   let regex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
   if (!regex.test(champs.value)) {
     // Mise en style
-    champs.setAttribute("style", "font-style : italic; border:1px solid red");
+    champs.setAttribute("style", "font-style : italic; border:2px solid red");
     message.textContent = "Email incorrect";
     champs.focus();
     // retourne la non validation
@@ -162,6 +162,7 @@ function validateMail(champs, message) {
 }
 
 ////////////////// Validation du formulaire //////////////////
+
 function validateForm() {
   // pointeurs
   nom = document.getElementById("firstName");
@@ -182,7 +183,7 @@ function validateForm() {
   //Contrôle du mail
   let mailValide = validateMail(mail, mailErr);
   if (nomValide && prenomValide && villeValide && mailValide) {
-    console.log("Tout ok");
+    console.log("Données valides");
     contact = {
       firstName: nom.value,
       lastName: prenom.value,
@@ -190,41 +191,35 @@ function validateForm() {
       city: ville.value,
       email: mail.value,
     };
+    console.log(contact);
     //envoyer le formulaire
     return true;
   } else {
-    console.log(nomValide);
-    console.log(prenomValide);
-    console.log(villeValide);
-    console.log(mailValide);
     return false;
   }
 }
+// Attribut onsubmit pour bloquer la validation du formulaire si la fonction retourne false
 document
   .querySelector(".cart__order__form")
   .setAttribute("onsubmit", "return validateForm();");
 
-document.getElementById("order").addEventListener("click", (e) => {
-  validateForm();
+// Tableau d'id
+let products = [];
+for (i = 0; i < objProducts.length; i++) {
+  products.push(objProducts[i].id);
+}
+let toSend = { contact, products };
+
+async function validateCart() {
+  await validateForm();
+  console.log(toSend);
   console.log(contact);
-  validateCart();
-});
-
-contactString = JSON.stringify(contact);
-let products = productsSaved;
-let test = contactString + products;
-console.log(test);
-console.log(products);
-console.log(contactString);
-
-function validateCart() {
   fetch("http://localhost:3000/api/products/order", {
     method: "post",
     headers: {
-      Accept: "application/json",
       "Content-type": "application/json",
     },
-    body: test,
+    body: JSON.stringify(toSend),
   })
     .then(function (data) {
       console.log("Request succeeded with JSON response", data);
@@ -233,3 +228,18 @@ function validateCart() {
       console.log("Request failed", error);
     });
 }
+
+validateCart();
+
+/*
+////////////////// Evenement sur bouton commander //////////////////
+
+document.getElementById("order").addEventListener("click", (e) => {
+  validateForm();
+  console.log(contact);
+  console.log(command);
+  console.log(products);
+  validateCart();
+});
+
+*/
