@@ -64,16 +64,16 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
   if (color == "") {
     colorsElt.setAttribute(
       "style",
-      "font-style : italic; border:2px solid red"
+      "font-style : italic; border:2px solid #09078c"
     );
     window.alert("Veuillez renseignez la couleur de votre choix");
     colorsElt.focus();
   }
-  if (quantity == 0) {
+  if (quantity < 1 || quantity > 100) {
     document
       .querySelector("input")
-      .setAttribute("style", "font-style : italic; border:2px solid red");
-    window.alert("Veuillez renseignez la quantité");
+      .setAttribute("style", "font-style : italic; border:2px solid #09078c");
+    window.alert("Veuillez renseignez la quantité (min: 1 et max: 100)");
     document.querySelector("input").focus();
   } else {
     colorsElt.removeAttribute("style");

@@ -1,4 +1,15 @@
+////////////////// Initialisation du panier localStorage //////////////////
+
 function saveCart(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
-  console.log("initialisation localStorage");
+}
+
+////////////////// Récuperation des produits localStorage //////////////////
+
+function getCart() {
+  if (productsSaved == null) {
+    window.alert("votre panier est vide");
+  } else {
+    return JSON.parse(productsSaved);
+  }
 }
