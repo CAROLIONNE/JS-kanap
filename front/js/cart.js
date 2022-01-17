@@ -192,7 +192,6 @@ function validateForm() {
       email: mail.value,
     };
     console.log(contact);
-    console.log(toSend);
     //envoyer le formulaire
     return true;
   } else {
@@ -210,10 +209,10 @@ let products = [];
 for (i = 0; i < objProducts.length; i++) {
   products.push(objProducts[i].id);
 }
-let toSend = { contact, products };
 
 async function validateCart() {
   await validateForm();
+  let toSend = { contact, products };
   console.log(toSend);
   console.log(contact);
   fetch("http://localhost:3000/api/products/order", {
