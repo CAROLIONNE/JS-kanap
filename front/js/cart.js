@@ -210,11 +210,11 @@ for (i = 0; i < objProducts.length; i++) {
   products.push(objProducts[i].id);
 }
 
+////////////////// requete POST pour envoyer les données //////////////////
+
 async function validateCart() {
   await validateForm();
   let toSend = { contact, products };
-  console.log(toSend);
-  console.log(contact);
   fetch("http://localhost:3000/api/products/order", {
     method: "post",
     headers: {
@@ -222,15 +222,22 @@ async function validateCart() {
     },
     body: JSON.stringify(toSend),
   })
-    .then(function (data) {
+    .then(async function (data) {
       console.log("Request succeeded with JSON response", data);
+      const response = await data.json();
+
+      if (data.ok) {
+        // Renvoie vers la page de confirmation avec l'ID et vide le localStorage
+        window.location = `../html/confirmation.html?id=${response.orderId}`;
+        localStorage.clear();
+      } else {
+        console.log(`Réponse du serveur : `, data.status);
+      }
     })
     .catch(function (error) {
       console.log("Request failed", error);
     });
 }
-
-//validateCart();
 
 ////////////////// Evenement sur bouton commander //////////////////
 
