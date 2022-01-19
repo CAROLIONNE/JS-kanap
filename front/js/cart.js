@@ -35,6 +35,7 @@ fetch("http://localhost:3000/api/products")
 ////////////////// Affichage du panier //////////////////
 
 function displayCart() {
+  // Pour chaque produit du panier injecter le données du produit dans le HTML
   for (product of objProducts) {
     cartItems.innerHTML += `
     <article class="cart__item" data-id=${product.id} data-color=${product.color}>
@@ -68,9 +69,10 @@ function changeQuantity(i, quantity) {
   // Récupère l'ID et la couleur du produit sélectionné
   let id = i.closest(".cart__item").dataset.id;
   let color = i.closest(".cart__item").dataset.color;
+  // Vérification du produit avec son id et sa couleur
   let foundProduct = objProducts.find((p) => p.id == id && p.color == color);
   foundProduct.quantity = quantity;
-  // envoi de la quantité au localStorage
+  // Envoi de la quantité au localStorage
   saveCart(objProducts);
   window.location.reload();
 }
@@ -79,11 +81,13 @@ function changeQuantity(i, quantity) {
 function getTotal() {
   total = 0;
   quantityCart = 0;
+  // pour chaque produit du panier 
   for (let product of objProducts) {
     let foundProduct = catalogue.find((p) => p._id == product.id);
     product.price = foundProduct.price;
-    // calcul quantité * prix
+    //  prix = quantité * prix
     total += product.quantity * foundProduct.price;
+    // quantité type number base 10
     quantityCart += parseInt(product.quantity, 10);
   }
   // Affichage du total
@@ -202,7 +206,7 @@ const villeErr = document.getElementById("cityErrorMsg");
 const mailErr = document.getElementById("emailErrorMsg");
 
 function validateForm() {
-  // Contrôle du nom, prenom et de la ville
+  // Contrôle des données utilisateurs du formulaire
   let nomValide = validateAlpha(nom, nomErr);
   let prenomValide = validateAlpha(prenom, prenomErr);
   let villeValide = validateAlpha(ville, villeErr);
@@ -229,13 +233,13 @@ document
   .querySelector(".cart__order__form")
   .setAttribute("onsubmit", "return validateForm();");
 
-// Tableau d'id pour l'envoyer a l'API
+// Tableau d'ID pour l'envoyer a l'API
 let products = [];
 for (i = 0; i < objProducts.length; i++) {
   products.push(objProducts[i].id);
 }
 
-////////////////// requete POST pour envoyer les données //////////////////
+////////////////// Requete POST pour envoyer les données a l'API //////////////////
 
 async function validateCart() {
   await validateForm();
@@ -251,8 +255,9 @@ async function validateCart() {
       const response = await data.json();
 
       if (data.ok) {
-        // Renvoie vers la page de confirmation avec l'ID et vide le localStorage
+        // Renvoie vers la page de confirmation avec l'ID de commande
         window.location = `../html/confirmation.html?id=${response.orderId}`;
+        // Vide le localStorage
         localStorage.clear();
       } else {
         console.log(`Réponse du serveur : `, data.status);
