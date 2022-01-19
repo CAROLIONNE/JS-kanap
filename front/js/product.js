@@ -4,9 +4,10 @@ const description = document.getElementById("description");
 const title = document.getElementById("title");
 const colorsElt = document.getElementById("colors");
 
-/////////----Recupérer ID dans URL----/////////
+/////////----Fetch requête GET----/////////
 
 let productData = [];
+// Récupérer l'ID dans l'URL
 let params = new URL(document.location).searchParams;
 let id = params.get("id");
 fetch(`http://localhost:3000/api/products/` + id)
@@ -15,16 +16,18 @@ fetch(`http://localhost:3000/api/products/` + id)
       return response.json();
     }
   })
+  // Récupérer la data du produit
   .then((data) => {
     productData = data;
   })
+  // Afficher le produit
   .then(detailProduct)
 
   .catch((error) => {
     console.log("Une erreur est survenue dans l'api");
   });
 
-///////----Affichage détails produit----////////
+////////----Affichage détails produit----////////
 
 let baliseImg = "";
 
@@ -46,12 +49,13 @@ function detailProduct() {
   document.title = productData.name;
 }
 
-///////----Ajouter produits au localStorage----////////
+////////----Ajouter produits au localStorage----////////
 
 document.getElementById("addToCart").addEventListener("click", (e) => {
   e.preventDefault();
   let color = document.querySelector("#colors").value;
   let quantity = document.querySelector("input").value;
+  // Objet produit avec ses details
   let product = {
     id: id,
     name: productData.name,
@@ -61,7 +65,8 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
   };
   let productSave = localStorage.getItem("cart");
   let cart = [];
-  // Si la couleur est mal renseignée style "erreur"
+
+  // Si la couleur est mal renseignée => style "erreur"
   if (color == "") {
     colorsElt.setAttribute(
       "style",
@@ -70,7 +75,7 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
     window.alert("Veuillez renseignez la couleur de votre choix");
     colorsElt.focus();
   }
-  // si la quantité est inférieure a 1 OU supérieure a 100 style "erreur"
+  // Si la quantité est inférieure a 1 OU supérieure a 100 => style "erreur"
   if (quantity < 1 || quantity > 100) {
     document
       .querySelector("input")
@@ -78,10 +83,10 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
     window.alert("Veuillez renseignez la quantité (min: 1 et max: 100)");
     document.querySelector("input").focus();
   } else {
-    // Sinon retire le style "erreur"
+  // Sinon retire le style "erreur"
     colorsElt.removeAttribute("style");
     document.querySelector("input").removeAttribute("style");
-    // si il y a un produit dans le local storage recupérer le panier
+    // Si il y a un produit dans le local storage recupérer le panier
     if (productSave != null) {
       cart = JSON.parse(productSave);
     }
@@ -89,20 +94,20 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
   }
 });
 
-///////---- Modification de la quantité----////////
+////////---- Modification de la quantité----////////
 
 function changeQuantity(cart, product) {
-  // verification du produit selectionné avec son nom et sa couleur
+  // Vérification du produit selectionné avec son nom et sa couleur
   let foundProduct = cart.find(
     (p) => p.name == product.name && p.color == product.color
   );
-  // si le produit existe dans le local storage => la quantité trouvée + la quantité saisie
+  // Si le produit existe dans le local storage => la quantité trouvée + la quantité saisie
   if (foundProduct != undefined) {
     let a = parseInt(foundProduct.quantity, 10);
     let b = parseInt(product.quantity, 10);
     foundProduct.quantity = JSON.stringify(a + b);
   } else {
-    // sinon envoyer le produit dans le tableau des produits
+    // Sinon envoyer le produit dans le tableau des produits
     cart.push(product);
   }
   // Envoi du tableau dans le local Storage
