@@ -29,7 +29,7 @@ fetch("http://localhost:3000/api/products")
     addEvent();
   })
   .catch((error) => {
-    console.log("Une erreur est survenue dans l'api");
+    alert("Excusez-nous pour la gène occasionnée, une erreur est survenue dans l'application : " + error);
   });
 
 ////////////////// Affichage du panier //////////////////
@@ -74,7 +74,7 @@ function changeQuantity(i, quantity) {
   foundProduct.quantity = quantity;
   // Envoi de la quantité au localStorage
   saveCart(objProducts);
-  window.location.reload();
+  //window.location.reload();
 }
 ////////////////// Prix et quantité totale des articles du panier //////////////////
 
@@ -103,19 +103,27 @@ function addEvent() {
   for (let input of inputQuantity) {
     input.addEventListener("change", (e) => {
       changeQuantity(input, e.target.value);
+      getTotal();
     });
   }
 
   let deleteProduct = document.querySelectorAll(".deleteItem");
   // Ecouter l'evenement au click sur les boutons "supprimer"
   for (let i = 0; i < deleteProduct.length; i++) {
+    
     deleteProduct[i].addEventListener("click", (event) => {
-      event.preventDefault();
-      // Suppression du produit sélectionné
-      objProducts.splice(i, 1);
-      saveCart(objProducts);
-      location.reload();
-    });
+      // confirmation utilisateur suppression
+        if (window.confirm("Cliquer sur ok si vous souhaitez supprimer cet article du panier ")) {
+        event.preventDefault();
+        // Suppression du produit sélectionné
+        objProducts.splice(i, 1);
+        saveCart(objProducts);
+        getTotal();
+        getCart();
+        displayCart();
+        //location.reload();
+      }
+      });
   }
 }
 
@@ -265,6 +273,7 @@ async function validateCart() {
     })
     .catch(function (error) {
       console.log("Request failed", error);
+      alert("L'envoi de la commande a échoué");
     });
 }
 
@@ -272,5 +281,7 @@ async function validateCart() {
 
 document.getElementById("order").addEventListener("click", (e) => {
   e.preventDefault();
-  validateCart();
+  if (productsSaved !== null){
+    validateCart();
+  }
 });

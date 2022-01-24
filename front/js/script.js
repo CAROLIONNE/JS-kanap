@@ -23,5 +23,5 @@ fetch("http://localhost:3000/api/products")
     }
   })
   .catch((erreur) => {
-    console.log("Une erreur est survenue dans l'api");
+    alert("Une erreur est survenue dans l'application : " + erreur);
   });

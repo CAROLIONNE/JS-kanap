@@ -19,12 +19,15 @@ fetch(`http://localhost:3000/api/products/` + id)
   // Récupérer la data du produit
   .then((data) => {
     productData = data;
+    if(!data){
+      alert('Produit introuvable');
+      }
   })
   // Afficher le produit
   .then(detailProduct)
 
-  .catch((error) => {
-    console.log("Une erreur est survenue dans l'api");
+  .catch((err) => {
+    console.log("Une erreur est survenue dans l'api" + err);
   });
 
 ////////----Affichage détails produit----////////
@@ -32,7 +35,7 @@ fetch(`http://localhost:3000/api/products/` + id)
 let baliseImg = "";
 
 function detailProduct() {
-  // crée une option pour chaque couleur 
+  // crée une option pour chaque couleur
   productData.colors.forEach((color) => {
     let newOption = document.createElement("option");
     newOption.innerHTML = `${color}`;
@@ -83,7 +86,7 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
     window.alert("Veuillez renseignez la quantité (min: 1 et max: 100)");
     document.querySelector("input").focus();
   } else {
-  // Sinon retire le style "erreur"
+    // Sinon retire le style "erreur"
     colorsElt.removeAttribute("style");
     document.querySelector("input").removeAttribute("style");
     // Si il y a un produit dans le local storage recupérer le panier
@@ -91,6 +94,11 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
       cart = JSON.parse(productSave);
     }
     changeQuantity(cart, product);
+    if (product.quantity == 1){
+      alert(product.quantity + " "+ product.name + " couleur : "+ product.color +" a bien été ajouté dans votre panier ")
+    }else{
+      alert(product.quantity + " "+ product.name + " couleur : "+ product.color + " sont ajoutés dans votre panier ")
+    }
   }
 });
 
