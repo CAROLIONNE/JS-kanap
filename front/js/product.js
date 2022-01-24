@@ -32,7 +32,6 @@ fetch(`http://localhost:3000/api/products/` + id)
 
 ////////----Affichage détails produit----////////
 
-let baliseImg = "";
 
 function detailProduct() {
   // crée une option pour chaque couleur
@@ -44,9 +43,8 @@ function detailProduct() {
     parentNode.appendChild(newOption);
   });
   // Injecter les données de l'api dans le HTML
-  baliseImg = `<img src=${productData.imageUrl} alt=${productData.altTxt}/>`;
   title.innerHTML = productData.name;
-  img.innerHTML = baliseImg;
+  img.innerHTML = `<img src=${productData.imageUrl} alt="${productData.altTxt}"/>`;
   price.innerHTML = productData.price;
   description.innerHTML = productData.description;
   document.title = productData.name;
@@ -64,7 +62,6 @@ document.getElementById("addToCart").addEventListener("click", (e) => {
     name: productData.name,
     quantity: quantity,
     color: color,
-    image: baliseImg,
   };
   let productSave = localStorage.getItem("cart");
   let cart = [];

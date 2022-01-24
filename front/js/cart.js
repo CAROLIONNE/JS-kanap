@@ -29,18 +29,29 @@ fetch("http://localhost:3000/api/products")
     addEvent();
   })
   .catch((error) => {
-    alert("Excusez-nous pour la gène occasionnée, une erreur est survenue dans l'application : " + error);
+    alert(
+      "Excusez-nous pour la gène occasionnée, une erreur est survenue dans l'application : " +
+        error
+    );
   });
+
+
+
+
 
 ////////////////// Affichage du panier //////////////////
 
 function displayCart() {
   // Pour chaque produit du panier injecter le données du produit dans le HTML
   for (product of objProducts) {
+    let foundProduct = catalogue.find((p) => p._id == product.id);
+    productImg = foundProduct.imageUrl;
+    productAlt = foundProduct.altTxt;
+
     cartItems.innerHTML += `
     <article class="cart__item" data-id=${product.id} data-color=${product.color}>
     <div class="cart__item__img">
-    ${product.image}
+    <img src=${productImg} alt="${productAlt}">
     </div>
     <div class="cart__item__content">
     <div class="cart__item__content__description">
@@ -81,7 +92,7 @@ function changeQuantity(i, quantity) {
 function getTotal() {
   total = 0;
   quantityCart = 0;
-  // pour chaque produit du panier 
+  // pour chaque produit du panier
   for (let product of objProducts) {
     let foundProduct = catalogue.find((p) => p._id == product.id);
     product.price = foundProduct.price;
@@ -107,26 +118,63 @@ function addEvent() {
     });
   }
 
-  let deleteProduct = document.querySelectorAll(".deleteItem");
+  // let deleteProduct = document.querySelectorAll(".deleteItem");
   // Ecouter l'evenement au click sur les boutons "supprimer"
-  for (let i = 0; i < deleteProduct.length; i++) {
-    
-    deleteProduct[i].addEventListener("click", (event) => {
-      // confirmation utilisateur suppression
-        if (window.confirm("Cliquer sur ok si vous souhaitez supprimer cet article du panier ")) {
-        event.preventDefault();
-        // Suppression du produit sélectionné
-        objProducts.splice(i, 1);
+  // for (let i = 0; i < deleteProduct.length; i++) {
+
+  //   deleteProduct[i].addEventListener("click", (event) => {
+  //     // confirmation utilisateur suppression
+  //       if (window.confirm("Cliquez sur ok si vous souhaitez supprimer cet article du panier ")) {
+  //       event.preventDefault();
+  //       // Suppression du produit sélectionné
+  //       objProducts.splice(i, 1);
+
+  //       saveCart(objProducts);
+  //       getTotal();
+  //       //getCart();
+  //       //displayCart();
+  //     }
+  //     });
+  // }
+
+
+  //////////////////////////////
+
+
+//////////////////
+let deleteBtn = document.querySelectorAll(".deleteItem");
+let deleteProduct = document.querySelectorAll(".cart__item");
+
+  deleteBtn.forEach((element, index) => {
+    element.addEventListener("click", () => {
+      // Chercher l'index via la couleur et l'id du dataset
+      let indexDeleteProduct = objProducts.findIndex(
+        (e) =>
+          e.colors === deleteProduct[index].dataset.color &&
+          e._id === deleteProduct[index].dataset.id
+      );
+        console.log(indexDeleteProduct);
+      if (indexDeleteProduct !== -1) {
+        // Supprime dans le localStorage
+        objProducts.splice(indexDeleteProduct, 1);
         saveCart(objProducts);
-        getTotal();
-        getCart();
-        displayCart();
-        //location.reload();
+        // Supprime sur le DOM
+        console.log(deleteProduct);
+        deleteProduct[index].remove();
+
+        // Si tableau vide, supprimer
+        if (objProducts == "") {
+          localStorage.removeItem("cart");
+          cart = "";
+        }
       }
-      });
-  }
+
+      getTotal();
+    });
+  });
 }
 
+/////////////////
 ////////////////// Verification des données du formulaire //////////////////
 
 function validateAlpha(champs, message) {
@@ -281,7 +329,7 @@ async function validateCart() {
 
 document.getElementById("order").addEventListener("click", (e) => {
   e.preventDefault();
-  if (productsSaved !== null){
+  if (productsSaved !== null) {
     validateCart();
   }
 });
