@@ -8,7 +8,10 @@ function saveCart(cart) {
 
 function getCart() {
   if (productsSaved == null) {
-    window.alert("votre panier est vide");
+    const cartItems = document.getElementById("cart__items");
+    cartItems.innerText = "Votre panier est vide"
+    cartItems.style.textAlign = "center"
+    cartItems.style.marginBottom = "30px"
   } else {
     return JSON.parse(productsSaved);
   }
