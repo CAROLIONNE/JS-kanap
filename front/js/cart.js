@@ -118,63 +118,24 @@ function addEvent() {
     });
   }
 
-  // let deleteProduct = document.querySelectorAll(".deleteItem");
+  let deleteBtn = document.querySelectorAll(".deleteItem");
+  let deleteProduct = document.querySelectorAll(".cart__item");
   // Ecouter l'evenement au click sur les boutons "supprimer"
-  // for (let i = 0; i < deleteProduct.length; i++) {
+  for (let i = 0; i < deleteBtn.length; i++) {
 
-  //   deleteProduct[i].addEventListener("click", (event) => {
-  //     // confirmation utilisateur suppression
-  //       if (window.confirm("Cliquez sur ok si vous souhaitez supprimer cet article du panier ")) {
-  //       event.preventDefault();
-  //       // Suppression du produit sélectionné
-  //       objProducts.splice(i, 1);
-
-  //       saveCart(objProducts);
-  //       getTotal();
-  //       //getCart();
-  //       //displayCart();
-  //     }
-  //     });
-  // }
-
-
-  //////////////////////////////
-
-
-//////////////////
-let deleteBtn = document.querySelectorAll(".deleteItem");
-let deleteProduct = document.querySelectorAll(".cart__item");
-
-  deleteBtn.forEach((element, index) => {
-    element.addEventListener("click", () => {
-      // Chercher l'index via la couleur et l'id du dataset
-      let indexDeleteProduct = objProducts.findIndex(
-        (e) =>
-          e.colors === deleteProduct[index].dataset.color &&
-          e._id === deleteProduct[index].dataset.id
-      );
-        console.log(indexDeleteProduct);
-      if (indexDeleteProduct !== -1) {
-        // Supprime dans le localStorage
-        objProducts.splice(indexDeleteProduct, 1);
+    deleteBtn[i].addEventListener("click", (element) => {
+      // confirmation utilisateur suppression
+        if (window.confirm("Cliquez sur ok si vous souhaitez supprimer cet article du panier ")) {
+        // Suppression du produit sélectionné
+        objProducts.splice(i, 1);
+        deleteProduct[i].remove();
         saveCart(objProducts);
-        // Supprime sur le DOM
-        console.log(deleteProduct);
-        deleteProduct[index].remove();
-
-        // Si tableau vide, supprimer
-        if (objProducts == "") {
-          localStorage.removeItem("cart");
-          cart = "";
-        }
+        getTotal();
       }
-
-      getTotal();
-    });
-  });
+      });
+  }
 }
 
-/////////////////
 ////////////////// Verification des données du formulaire //////////////////
 
 function validateAlpha(champs, message) {
